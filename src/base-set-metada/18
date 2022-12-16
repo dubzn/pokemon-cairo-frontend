@@ -1,11 +1,10 @@
 {
 	"name": "Dragonair",
 	"description": "A mystical Pokémon that exudes a gentle aura. Has the ability to change climate conditions.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/18.webp",
-	"properties": {
-        "number": "18",
-        "type": "Colorless",
-        "artist": "Mitsuhiro Arita",
-        "rarity": "Rare"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/18.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Colorless"},
+        {"trait_type":"Artist","value":"Mitsuhiro Arita"},
+        {"trait_type":"Rarity","value":"Rare"}
+    ]
 }

@@ -1,11 +1,10 @@
 {
 	"name": "Blastoise",
 	"description": "A brutal Pokémon with pressurized water jets on its shell. They are used for high-speed tackles.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/2.webp",
-	"properties": {
-        "number": "2",
-        "type": "Water",
-        "artist": "Ken Sugimori",
-        "rarity": "Rare Holo"
-	}
+	"image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/2.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Water"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Rare Holo"}
+    ]
 }

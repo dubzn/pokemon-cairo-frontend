@@ -1,11 +1,10 @@
 {
 	"name": "Staryu",
 	"description": "An enigmatic Pokémon that can effortlessly regenerate any appendage it loses in battle.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/65.webp",
-	"properties": {
-        "number": "65",
-        "type": "Water",
-        "artist": "Keiji Kinebuchi",
-        "rarity": "Common"
-    }
+	"image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/65.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Water"},
+        {"trait_type":"Artist","value":"Keiji Kinebuchi"},
+        {"trait_type":"Rarity","value":"Common"}
+    ]
 }

@@ -1,11 +1,10 @@
 {
 	"name": "Magikarp",
 	"description": "In the distant past, it was stronger than its horribly weak descendants that exist today.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/35.webp",
-	"properties": {
-        "number": "35",
-        "type": "Water",
-        "artist": "Mitsuhiro Arita",
-        "rarity": "Uncommon"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/35.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Water"},
+        {"trait_type":"Artist","value":"Mitsuhiro Arita"},
+        {"trait_type":"Rarity","value":"Uncommon"}
+    ]
 }

@@ -1,11 +1,10 @@
 {
 	"name": "Pidgey",
 	"description": "A common sight in forests and woods. It flaps its wings at ground level to kick up blinding sand.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/57.webp",
-	"properties": {
-        "number": "57",
-        "type": "Colorless",
-        "artist": "Ken Sugimori",
-        "rarity": "Common"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/57.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Colorless"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Common"}
+    ]
 }

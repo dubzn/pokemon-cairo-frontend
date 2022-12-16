@@ -1,11 +1,10 @@
 {
 	"name": "Magmar",
 	"description": "Its body always burns with an orange glow that enables it to hide perfectly among flames.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/36.webp",
-	"properties": {
-        "number": "36",
-        "type": "Fire",
-        "artist": "Ken Sugimori",
-        "rarity": "Uncommon"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/36.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Fire"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Uncommon"}
+    ]
 }

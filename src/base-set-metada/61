@@ -1,11 +1,10 @@
 {
 	"name": "Rattata",
 	"description": "Bites anything when it attacks. Small and very quick, it is a common sight in many places.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/61.webp",
-	"properties": {
-        "number": "61",
-        "type": "Colorless",
-        "artist": "Mitsuhiro Arita",
-        "rarity": "Common"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/61.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Colorless"},
+        {"trait_type":"Artist","value":"Mitsuhiro Arita"},
+        {"trait_type":"Rarity","value":"Common"}
+    ]
 }

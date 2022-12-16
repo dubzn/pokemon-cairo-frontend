@@ -1,11 +1,10 @@
 {
 	"name": "Starmie",
 	"description": "Its central core glows with the seven colors of the rainbow. Some people value this core as a gem.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/64.webp",
-	"properties": {
-        "number": "64",
-        "type": "Water",
-        "artist": "Keiji Kinebuchi",
-        "rarity": "Common"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/64.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Water"},
+        {"trait_type":"Artist","value":"Keiji Kinebuchi"},
+        {"trait_type":"Rarity","value":"Common"}
+    ]
 }

@@ -1,11 +1,10 @@
 {
 	"name": "Gastly",
 	"description": "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/50.webp",
-	"properties": {
-        "number": "50",
-        "type": "Psychic",
-        "artist": "Keiji Kinebuchi",
-        "rarity": "Common"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/50.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Psychic"},
+        {"trait_type":"Artist","value":"Keiji Kinebuchi"},
+        {"trait_type":"Rarity","value":"Common"}
+    ]
 }

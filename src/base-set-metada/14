@@ -1,11 +1,10 @@
 {
 	"name": "Raichu",
 	"description": "Its long tail serves as a ground to protect itself from its own high-voltage power.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/14.webp",
-	"properties": {
-        "number": "14",
-        "type": "Lightning",
-        "artist": "Ken Sugimori",
-        "rarity": "Rare Holo"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/14.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Lightning"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Rare Holo"}
+    ]
 }

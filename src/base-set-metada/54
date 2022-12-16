@@ -1,11 +1,10 @@
 {
 	"name": "Metapod",
 	"description": "It is vulnerable to attack because its shell is soft, exposing its weak and tender body.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/54.webp",
-	"properties": {
-        "number": "54",
-        "type": "Grass",
-        "artist": "Ken Sugimori",
-        "rarity": "Common"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/54.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Grass"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Common"}
+    ]
 }

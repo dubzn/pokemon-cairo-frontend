@@ -1,11 +1,10 @@
 {
 	"name": "Tangela",
 	"description": "Its whole body is swathed with wide vines that are similar to seaweed. These vines shake as it walks.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/66.webp",
-	"properties": {
-        "number": "66",
-        "type": "Grass",
-        "artist": "Mitsuhiro Arita",
-        "rarity": "Common"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/66.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Grass"},
+        {"trait_type":"Artist","value":"Mitsuhiro Arita"},
+        {"trait_type":"Rarity","value":"Common"}
+    ]
 }

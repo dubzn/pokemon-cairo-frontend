@@ -1,11 +1,10 @@
 {
 	"name": "Zapdos",
 	"description": "A legendary bird Pokémon said to appear from clouds while wielding enormous lightning bolts.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/16.webp",
-	"properties": {
-        "number": "16",
-        "type": "Lightning",
-        "artist": "Ken Sugimori",
-        "rarity": "Rare Holo"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/16.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Lightning"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Rare Holo"}
+    ]
 }

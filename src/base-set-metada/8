@@ -1,11 +1,10 @@
 {
 	"name": "Machamp",
 	"description": "Using its amazing muscles, it throws powerful punches that can knock its victim clear over the horizon.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/8.webp",
-	"properties": {
-        "number": "8",
-        "type": "Fighting",
-        "artist": "Ken Sugimori",
-        "rarity": "Rare Holo"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/8.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Fighting"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Rare Holo"}
+    ]
 }

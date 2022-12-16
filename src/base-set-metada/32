@@ -1,11 +1,10 @@
 {
 	"name": "Kadabra",
 	"description": "It emits special alpha waves from its body that induce headaches even to those just nearby.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/32.webp",
-	"properties": {
-        "number": "32",
-        "type": "Psychic",
-        "artist": "Ken Sugimori",
-        "rarity": "Uncommon"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/32.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Psychic"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Uncommon"}
+    ]
 }

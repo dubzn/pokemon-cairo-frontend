@@ -15,12 +15,12 @@
 	import { connect, disconnect } from "get-starknet"
 	
 	
-	const POKEMON_CONTRACT_ADDRESS = "0x016c26ecae31092f38d330eabcc8a047d65f4037c74b25bc58135b205d07369b"
+	const POKEMON_CONTRACT_ADDRESS = "0x003c01c40d2466418a764982b0a3e206e611e6b73297395bc85c478a5fb879e1"
 	// const POKEMON_CONTRACT_ADDRESS = "0x0344eaf4ccc9f9a4fcccf9140a1cd0820e5a06bccd697847f863fbe733b672f0"
 
 	// const POKEMON_CONTRACT_ADDRESS = "0x07927d282802f2dc3904d4e010a0d7ce983646837da74ed89dba78732ceb663f"
 	// const POKEMON_CONTRACT_ADDRESS = "0x02a1e5176c4d391fde798f5739fed081901710377eecffe493a46c8ad880fc39"
-	const ipfs_url = "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/"
+	const ipfs_url = "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8"
     const CARDS_DECK = 69;
 	const DAILY_MINT_STATUS_KEY = "daily_mint_status"
 	const DAILY_SEND_CARD_STATUS_KEY = "daily_send_card_status"
@@ -279,7 +279,7 @@
 
 	init()
 
-	// console.log(stringToFeltArray("https://gateway.pinata.cloud/ipfs/QmfFAsU3zv6QYLQY4SNEfdjznhS2T2mW1gQDDG4bNvvuBy/"))
+	console.log(stringToFeltArray("ipfs://QmemtWG3sHr5aFPGxsPCaxdv9qotWYChf17PLiepAvfMwy/"))
 
 	onMount(() => {
 		const $headings = document.querySelectorAll("h1,h2,h3");
@@ -381,8 +381,8 @@
 								/>
 							</div>
 							{#each mintedTodayCards as card, i}
-								{#if card <= 15} <CardMinted img={ipfs_url+"/"+ (card) +".webp"} rarity="Rare Holo V"/> {/if}
-								{#if card > 15} <CardMinted img={ipfs_url+"/"+ (card) +".webp"} rarity="Common"/>{/if}
+								{#if card <= 15} <CardMinted img={ipfs_url+"/"+ (card) +".png"} rarity="Rare Holo V"/> {/if}
+								{#if card > 15} <CardMinted img={ipfs_url+"/"+ (card) +".png"} rarity="Common"/>{/if}
 							{/each}
 						{/if}
 					{/if}
@@ -493,7 +493,7 @@
 				{#if card.quantity > 0}	
 					{#if card.id <= 15}
 						<Card 
-							img={ipfs_url+"/"+ (card.id+1) +".webp"}
+							img={ipfs_url+"/"+ (card.id+1) +".png"}
 							number= {card.id+1}
 							quantity={card.quantity}
 							rarity="Rare Holo V"
@@ -501,7 +501,7 @@
 					{/if}
 					{#if card.id > 15}
 						<Card 
-							img={ipfs_url+"/"+ (card.id+1) +".webp"}
+							img={ipfs_url+"/"+ (card.id+1) +".png"}
 							number= {card.id+1}
 							quantity={card.quantity}
 							rarity="Common"

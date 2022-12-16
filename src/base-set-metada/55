@@ -1,11 +1,10 @@
 {
 	"name": "Nidoran ♂",
 	"description": "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/55.webp",
-	"properties": {
-        "number": "55",
-        "type": "Grass",
-        "artist": "Ken Sugimori",
-        "rarity": "Common"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/55.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Grass"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Common"}
+    ]
 }

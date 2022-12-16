@@ -1,11 +1,10 @@
 {
 	"name": "Electabuzz",
 	"description": "Normally found near power plants, it can wander away and cause major blackouts in cities.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/20.webp",
-	"properties": {
-        "number": "20",
-        "type": "Lightning",
-        "artist": "Ken Sugimori",
-        "rarity": "Rare"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/20.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Lightning"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Rare"}
+    ]
 }

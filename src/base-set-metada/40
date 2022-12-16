@@ -1,11 +1,10 @@
 {
 	"name": "Raticate",
 	"description": "It uses its whiskers to maintain its balance. It seems to slow down if they are cut off.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/40.webp",
-	"properties": {
-        "number": "40",
-        "type": "Colorless",
-        "artist": "Ken Sugimori",
-        "rarity": "Uncommon"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/40.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Colorless"},
+        {"trait_type":"Artist","value":"Ken Sugimori"},
+        {"trait_type":"Rarity","value":"Uncommon"}
+    ]
 }

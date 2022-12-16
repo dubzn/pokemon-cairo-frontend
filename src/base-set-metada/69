@@ -1,11 +1,10 @@
 {
 	"name": "Weedle",
 	"description": "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.",
-	"image": "https://ipfs.io/ipfs/QmbCRMSuCDxxXGRNgvAM3BhDVNC6i8hvCT2NvpnsqgFQhS/69.webp",
-	"properties": {
-        "number": "69",
-        "type": "Grass",
-        "artist": "Mitsuhiro Arita",
-        "rarity": "Common"
-    }
+    "image": "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/69.png",
+	"attributes":[
+        {"trait_type":"Type","value":"Grass"},
+        {"trait_type":"Artist","value":"Mitsuhiro Arita"},
+        {"trait_type":"Rarity","value":"Common"}
+    ]
 }
