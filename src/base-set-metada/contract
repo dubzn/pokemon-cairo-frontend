@@ -1,0 +1,8 @@
+{
+	"name": "PokeCairo Cards",
+	"description": "Pokemon card base set collection released in October 1996",
+	"image": "https://gateway.pinata.cloud/ipfs/QmR3phG2YQYRTzo1oQztCUKSbuyiAV6FrxBz96uRzno4PY",
+    "banner_image_url": "https://gateway.pinata.cloud/ipfs/QmZSbhdXW2NLyk49LHG6S4GECGoQbn7iq8tJR2jEMNRGwF",
+    "seller_fee_basis_points": 100, 
+    "fee_recipient": "0x0660cc8805f88e40c4e685abf35b279dc05c02db063f719074a4fd2c0bfe725a" 
+}

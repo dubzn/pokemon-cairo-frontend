@@ -15,11 +15,7 @@
 	import { connect, disconnect } from "get-starknet"
 	
 	
-	const POKEMON_CONTRACT_ADDRESS = "0x003c01c40d2466418a764982b0a3e206e611e6b73297395bc85c478a5fb879e1"
-	// const POKEMON_CONTRACT_ADDRESS = "0x0344eaf4ccc9f9a4fcccf9140a1cd0820e5a06bccd697847f863fbe733b672f0"
-
-	// const POKEMON_CONTRACT_ADDRESS = "0x07927d282802f2dc3904d4e010a0d7ce983646837da74ed89dba78732ceb663f"
-	// const POKEMON_CONTRACT_ADDRESS = "0x02a1e5176c4d391fde798f5739fed081901710377eecffe493a46c8ad880fc39"
+	const POKEMON_CONTRACT_ADDRESS = "0x0655f17c51b930f9d52f772bc297fd025e76748cc818e10ecd0393229c19aced"
 	const ipfs_url = "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8"
     const CARDS_DECK = 69;
 	const DAILY_MINT_STATUS_KEY = "daily_mint_status"
@@ -66,7 +62,6 @@
 				
 				return data
 			}
-			// await wallet.enable({ showModal: true, starknetVersion: "v4" })     
 		}   catch(error){     
 			walletModalVisible = false
 			console.log(error.message)
@@ -197,6 +192,8 @@
 
 			switch(data.status) {
 				case "NOT_RECEIVED":
+					localStorage.removeItem(DAILY_MINT_STATUS_KEY)
+					break;
 				case "ACCEPTED_ON_L1":
 				case "ACCEPTED_ON_L2":
 					localStorage.removeItem(DAILY_MINT_STATUS_KEY)
@@ -225,6 +222,8 @@
 		
 			switch(data.status) {
 				case "NOT_RECEIVED":
+					localStorage.removeItem(DAILY_SEND_CARD_STATUS_KEY)
+					break;
 				case "ACCEPTED_ON_L1":
 				case "ACCEPTED_ON_L2":
 					localStorage.removeItem(DAILY_SEND_CARD_STATUS_KEY)
@@ -279,7 +278,7 @@
 
 	init()
 
-	console.log(stringToFeltArray("ipfs://QmemtWG3sHr5aFPGxsPCaxdv9qotWYChf17PLiepAvfMwy/"))
+	// console.log(stringToFeltArray("ipfs://QmcrwspvmgG3GrkBmdpzr5H1jF2bJKnNR42VCvnsvN6QaH/"))
 
 	onMount(() => {
 		const $headings = document.querySelectorAll("h1,h2,h3");
