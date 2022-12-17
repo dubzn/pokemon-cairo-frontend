@@ -15,7 +15,7 @@
 	import { connect, disconnect } from "get-starknet"
 	
 	
-	const POKEMON_CONTRACT_ADDRESS = "0x0655f17c51b930f9d52f772bc297fd025e76748cc818e10ecd0393229c19aced"
+	const POKEMON_CONTRACT_ADDRESS = "0x04a0ab7d390fee76798afcdf28700007b2a23b42950548d0bf396357b6c442d0"
 	const ipfs_url = "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8"
     const CARDS_DECK = 69;
 	const DAILY_MINT_STATUS_KEY = "daily_mint_status"
@@ -278,7 +278,7 @@
 
 	init()
 
-	// console.log(stringToFeltArray("ipfs://QmcrwspvmgG3GrkBmdpzr5H1jF2bJKnNR42VCvnsvN6QaH/"))
+	console.log(stringToFeltArray("ipfs://QmcrwspvmgG3GrkBmdpzr5H1jF2bJKnNR42VCvnsvN6QaH/"))
 
 	onMount(() => {
 		const $headings = document.querySelectorAll("h1,h2,h3");
