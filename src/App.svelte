@@ -48,6 +48,16 @@
 
 	let nextDayMintCountDown;
 
+	let paramWallet;
+
+	const urlParams = new URLSearchParams(window.location.search);
+	if (urlParams.get("wallet")) {
+		let resp = urlParams.get("wallet").match('^0x[a-fA-F0-9]{64}$')
+		if (resp != null) {
+			paramWallet = urlParams.get("wallet");
+		}
+	}
+
 	const connectWallet = async() => {   
 		try{
 			walletModalVisible = true
@@ -58,6 +68,14 @@
 				isConnected = wallet.isConnected    
 				provider = wallet.account     
 				address = wallet.selectedAddress   
+
+				if (paramWallet) {
+					if (paramWallet.toLowerCase().includes(address.substring(2).toLowerCase())) {
+						paramWallet = null;
+					} else {
+						address = paramWallet
+					}
+				}
 				
 				pokemonContract = new Contract(contract.abi, POKEMON_CONTRACT_ADDRESS, provider);
 				walletModalVisible = false
@@ -288,7 +306,6 @@
 	const calculateNextDayMint = async () => {
 		isLoadingBlockTime = true;
 		let blockTime = await pokemonContract.blockTimestamp();
-		console.log(blockTime[0].toNumber())
 		let nextMintDay = new Date((blockTime) * 1000);
 		nextMintDay.setDate(nextMintDay.getDate() + 1)
 		nextMintDay.setUTCHours(0);
@@ -381,6 +398,7 @@
 							</a>
 							{#each Array(5) as _, i} <div> <CardMinted /> </div> {/each}
 						{:else}
+							{#if !paramWallet} 
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<div on:click={() => mintDailyCards()} >
 								<div class="card-tag" style="background-color: rgba(13, 199, 0, 0.8);">READY TO CLAIM</div>
@@ -390,21 +408,35 @@
 									/>
 							</div>
 							{#each Array(5) as _, i} <div> <CardMinted /> </div> {/each}
+							{:else}
+								<div> <CardPackOff 
+									img={"https://i.ibb.co/2Ykx1Tg/base-set.jpg"}
+									rarity="Common" />
+								</div>
+								{#each Array(5) as _, i} <div> <CardMinted /> </div> {/each}			
+							{/if}
 						{/if}
 					{:else}
 						{#if !isLoadingMintedToday && mintedTodayCards.length > 1}
-							<div>
-								<div class="card-tag" style="background-color: rgba(255, 0, 0, 0.8);">
-									OUT OF STOCK
-									{#if !isLoadingBlockTime}
-										<div class="countdown" >{$time}</div>
-									{/if}
+							{#if !paramWallet} 
+								<div>
+									<div class="card-tag" style="background-color: rgba(255, 0, 0, 0.8);">
+										OUT OF STOCK
+										{#if !isLoadingBlockTime}
+											<div class="countdown" >{$time}</div>
+										{/if}
+									</div>
+									<CardPackOff 
+										img={"https://i.ibb.co/2Ykx1Tg/base-set.jpg"}
+										rarity="Common"
+									/>
 								</div>
-								<CardPackOff 
+							{:else}
+								<div> <CardPackOff 
 									img={"https://i.ibb.co/2Ykx1Tg/base-set.jpg"}
-									rarity="Common"
-								/>
-							</div>
+									rarity="Common" />
+								</div>
+							{/if}
 							{#each mintedTodayCards as card, i}
 								{#if card <= 15} <CardMinted img={ipfs_url+"/"+ (card) +".png"} rarity="Rare Holo V"/> {/if}
 								{#if card > 15} <CardMinted img={ipfs_url+"/"+ (card) +".png"} rarity="Common"/>{/if}
@@ -429,7 +461,7 @@
 			</CardListDaily>
 		</div>
 	</header>
-	
+
 	<br>
 	<header style="grid-template-columns: 50% 50%;">
 		<div class="inside-header2">
@@ -463,7 +495,7 @@
 				
 				{/if}
 			</div>
-			{#if !isLoading && !isLoadingTradeData && userTradeData.dailySend == 0 }
+			{#if !isLoading && !isLoadingTradeData && userTradeData.dailySend == 0 && !paramWallet}
 				<h2>Send a card</h2>
 				<input class="input-wallet" placeholder="Wallet address.." bind:value={addressToSendCard}>
 				<div class="daily-trade-menu" style="width: 100%;">	
@@ -487,7 +519,7 @@
 				{/if}
 			
 			
-			{#if isConnected}
+			{#if isConnected && !paramWallet}
 			<div class="flags" style="background-color: rgba(255, 255, 255, 0.3)">{address}</div>
 			<div class="daily-trade-menu" style="width: 100%; grid-template-columns: 1fr;">
 				
@@ -497,7 +529,7 @@
 						Disconnect Wallet
 				</button>
 			</div>
-			{:else}
+			{:else if !paramWallet}
 			<div class="daily-trade-menu" style="width: 100%; grid-template-columns: 1fr;">
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<button class="flags" style="background-color: rgba(21, 161, 222, 0.9)"
