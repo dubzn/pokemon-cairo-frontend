@@ -10,10 +10,10 @@
 	import * as contract from './contract/main.json';
 	import pokemon from "./contract/data.json";
 	import { stringToFeltArray } from "./utils/utils.js";
-	
+	import { timer, time } from "./utils/countdown.js";
+
 	import { Account, Contract, ec, number, uint256, defaultProvider } from "starknet";
 	import { connect, disconnect } from "get-starknet"
-	
 	
 	const POKEMON_CONTRACT_ADDRESS = "0x04a0ab7d390fee76798afcdf28700007b2a23b42950548d0bf396357b6c442d0"
 	const ipfs_url = "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8"
@@ -38,12 +38,15 @@
 	let isLoading = true;
 	let isLoadingMintedToday = true;
 	let isLoadingTradeData = true;
+	let isLoadingBlockTime = true;
 
 	let addressToSendCard;
 	let cardSelectedToSend;
 
 	let dailyMintTxStatus = {};
 	let dailySendCardTxStatus = {};
+
+	let nextDayMintCountDown;
 
 	const connectWallet = async() => {   
 		try{
@@ -170,6 +173,7 @@
 		for (var i = cardsInString.length - 1; i >= 0; i-=2) {
 			cards.push(parseInt(cardsInString[i-1] + cardsInString[i]))
 		}
+
 		return cards;
 	};
 
@@ -243,7 +247,10 @@
 	const refresh = async (params) => { 
 		if (params.includes(DAILY_MINT)) {
 			isLoadingMintedToday = true;
-			getCardsMintedToday().then((mintedToday) => { mintedTodayCards = mintedToday; isLoadingMintedToday = false;});
+			calculateNextDayMint()
+			getCardsMintedToday().then((mintedToday) => { 
+				mintedTodayCards = mintedToday; 
+				isLoadingMintedToday = false; });
 		} 
 		if (params.includes(DAILY_TRADE)) {
 			isLoadingTradeData = true;
@@ -278,7 +285,21 @@
 
 	init()
 
-	console.log(stringToFeltArray("ipfs://QmcrwspvmgG3GrkBmdpzr5H1jF2bJKnNR42VCvnsvN6QaH/"))
+	const calculateNextDayMint = async () => {
+		isLoadingBlockTime = true;
+		let blockTime = await pokemonContract.blockTimestamp();
+		console.log(blockTime[0].toNumber())
+		let nextMintDay = new Date((blockTime) * 1000);
+		nextMintDay.setDate(nextMintDay.getDate() + 1)
+		nextMintDay.setUTCHours(0);
+		nextMintDay.setUTCMinutes(0);
+		nextMintDay.setUTCSeconds(0);
+		nextDayMintCountDown = (nextMintDay.valueOf() / 1000) - (Date.now().valueOf() / 1000);
+		timer.start(nextDayMintCountDown * 1000)
+		isLoadingBlockTime = false;
+	}
+
+	// console.log(stringToFeltArray("ipfs://QmcrwspvmgG3GrkBmdpzr5H1jF2bJKnNR42VCvnsvN6QaH/"))
 
 	onMount(() => {
 		const $headings = document.querySelectorAll("h1,h2,h3");
@@ -373,7 +394,12 @@
 					{:else}
 						{#if !isLoadingMintedToday && mintedTodayCards.length > 1}
 							<div>
-								<div class="card-tag" style="background-color: rgba(255, 0, 0, 0.8);">OUT OF STOCK</div>
+								<div class="card-tag" style="background-color: rgba(255, 0, 0, 0.8);">
+									OUT OF STOCK
+									{#if !isLoadingBlockTime}
+										<div class="countdown" >{$time}</div>
+									{/if}
+								</div>
 								<CardPackOff 
 									img={"https://i.ibb.co/2Ykx1Tg/base-set.jpg"}
 									rarity="Common"

@@ -6,7 +6,6 @@
   import { activeCard } from "../stores/activeCard.js";
   import { orientation, resetBaseOrientation } from "../stores/orientation.js";
   import { clamp, round } from "../helpers/Math.js";
-	import pokemon from "../../contract/data.json";
 
   import Glare from "../components/card-glare.svelte";
   import Shine from "../components/card-shine.svelte";
@@ -174,10 +173,10 @@
 
   const popover = () => {
     const rect = thisCard.getBoundingClientRect(); // get element's size/position
-    let delay = 100;
+    let delay = 150;
     let scaleW = (window.innerWidth / rect.width) * 0.9;
     let scaleH = (window.innerHeight / rect.height) * 0.9;
-    let scaleF = 1.75;
+    let scaleF = 1.6;
     setCenter();
     if (firstPop) {
       delay = 1000;
@@ -435,7 +434,7 @@
   .card__translater,
   .card__rotator {
     display: grid;
-    perspective: 600px;
+    perspective: 700px;
     transform-origin: center;
     -webkit-transform-origin: center;
     will-change: transform;
@@ -485,7 +484,7 @@
     display: grid;
     grid-area: 1/1;
     border-radius: var(--radius);
-    /* image-rendering: optimizeQuality; */
+    image-rendering: optimizeQuality;
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
   }

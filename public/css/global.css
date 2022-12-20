@@ -185,26 +185,6 @@ header svg {
   z-index: 1;
 }
 
-.minted-text-out-stock {
-  border-radius: 5px;
-  padding: 3px;
-  position:absolute;
-  max-width: min(215px, 35vw);
-  text-align: center;
-  background-color: rgba(213, 21, 238, 0.8);
-  z-index: 1;
-}
-
-.minted-text-has-stock {
-  border-radius: 5px;
-  padding: 3px;
-  position:absolute;
-  max-width: min(215px, 35vw);
-  text-align: center;
-  background-color: rgba(13, 199, 0, 0.8);
-  z-index: 1;
-}
-
 .quantity-text {
   font-family: Roboto;
   font-size: large;

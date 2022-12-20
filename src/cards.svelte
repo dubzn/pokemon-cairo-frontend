@@ -25,7 +25,7 @@
 		
 		background-color: rgba(0, 0, 0, 0.6);
 		grid-template-columns: 1fr;
-		grid-gap: 1.5vw;
+		grid-gap: 1vw;
 		height: 100%;
 		max-width: 90%;
 		margin: auto;
