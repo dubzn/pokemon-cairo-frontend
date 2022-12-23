@@ -15,12 +15,12 @@
 	import { Account, Contract, ec, number, uint256, defaultProvider } from "starknet";
 	import { connect, disconnect } from "get-starknet"
 	
-	const POKEMON_CONTRACT_ADDRESS = "0x04a0ab7d390fee76798afcdf28700007b2a23b42950548d0bf396357b6c442d0"
+	const POKEMON_CONTRACT_ADDRESS = "0x052ac3fb8c9cee6f2b36b786627f1ab5f2b6db0945f6c6d7d8d79d9400ebae91"
 	const ipfs_url = "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8"
     const CARDS_DECK = 69;
 	const DAILY_MINT_STATUS_KEY = "daily_mint_status"
 	const DAILY_SEND_CARD_STATUS_KEY = "daily_send_card_status"
-	const DEPLOY_SCOPE = "testnet." // if mainnet, leave empty
+	const DEPLOY_SCOPE = "testnet." // for mainnet, leave empty
 
 	const DAILY_MINT = "dailyMint"
 	const OWNED_CARDS = "ownedCards"
@@ -41,6 +41,7 @@
 	let isLoadingBlockTime = true;
 
 	let addressToSendCard;
+	let addressToSearch;
 	let cardSelectedToSend;
 
 	let dailyMintTxStatus = {};
@@ -49,10 +50,9 @@
 	let nextDayMintCountDown;
 
 	let paramWallet;
-
 	const urlParams = new URLSearchParams(window.location.search);
 	if (urlParams.get("wallet")) {
-		let resp = urlParams.get("wallet").match('^0x[a-fA-F0-9]{64}$')
+		let resp = urlParams.get("wallet").match('^0x[a-fA-F0-9]*')
 		if (resp != null) {
 			paramWallet = urlParams.get("wallet");
 		}
@@ -312,11 +312,25 @@
 		nextMintDay.setUTCMinutes(0);
 		nextMintDay.setUTCSeconds(0);
 		nextDayMintCountDown = (nextMintDay.valueOf() / 1000) - (Date.now().valueOf() / 1000);
+		console.log((nextMintDay.valueOf() / 1000))
+		console.log((Date.now().valueOf() / 1000))
+		console.log(nextDayMintCountDown * 1000)
 		timer.start(nextDayMintCountDown * 1000)
 		isLoadingBlockTime = false;
 	}
 
-	// console.log(stringToFeltArray("ipfs://QmcrwspvmgG3GrkBmdpzr5H1jF2bJKnNR42VCvnsvN6QaH/"))
+	const handleSearchKeyPressed = async (key) => {
+		if(key.code == 'Enter' && addressToSearch) {
+			let matchWithWalletRegex = addressToSearch.match('^0x[a-fA-F0-9]*')
+			if (matchWithWalletRegex) {
+				let url =  window.location.origin
+				window.location.replace(url + "?wallet=" + addressToSearch)
+			}
+		} 
+	}
+
+	// console.log(stringToFeltArray("ipfs://Qme8n4HBTyt8rvLr6bX5XiT6vCLsNkVNK8NjAw66esYQQ5/")) // metadata
+	// console.log(stringToFeltArray("ipfs://QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/")) // cartas
 
 	onMount(() => {
 		const $headings = document.querySelectorAll("h1,h2,h3");
@@ -335,7 +349,6 @@
 </script>
 
 <main>
-	
 	<header>
 		<div class="header-inside">
 			<h1 id="⚓-top">Cairo Pokemon Cards</h1> 
@@ -463,7 +476,7 @@
 	</header>
 
 	<br>
-	<header style="grid-template-columns: 50% 50%;">
+	<header style="grid-template-columns: 1fr 1fr; width: 100%;">
 		<div class="inside-header2">
 			{#if isLoadingTradeData}
 				<h1 id="⚓-top">
@@ -482,7 +495,7 @@
 								<div class="flags" style="background-color: rgba(213, 21, 238, 0.8);">Transaction in progress..</div>
 							</a>
 						{:else}
-							<div class="flags" style="background-color: rgba(0, 204, 102, 0.8);">Can send a card </div>	
+							<div class="flags" style="background-color: rgba(0, 204, 102, 0.8);">Can send a card</div>	
 						{/if}
 				{:else}
 					<div class="flags" style="background-color: rgba(255, 255, 255, 0.3);">Already send a card</div>
@@ -510,25 +523,20 @@
 				</div>
 			{/if}
 		</div>
-		<div class="inside-header2">
+		<div class="inside-header2" style="margin-right:0px;">
 			<h1 id="⚓-top">Wallet stats </h1>
-				{#if isLoading}
-					<h2>Loading cards..</h2>
-				{:else}
-					<h2>Minted cards {mintedCards.length}/69</h2>
-				{/if}
-			
-			
+			{#if isLoading}
+				<h2>Loading cards..</h2>
+			{:else}
+				<h2>Minted cards {mintedCards.length}/69</h2>
+			{/if}
 			{#if isConnected && !paramWallet}
-			<div class="flags" style="background-color: rgba(255, 255, 255, 0.3)">{address}</div>
-			<div class="daily-trade-menu" style="width: 100%; grid-template-columns: 1fr;">
-				
-				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<button class="flags" style="background-color: rgba(21, 161, 222, 0.9)"
-					on:click={() => handleDisconnect()}>
-						Disconnect Wallet
-				</button>
-			</div>
+				<div class="daily-trade-menu" style="width: 100%; grid-template-columns: 75% 25%;">
+					<div class="flags" style="background-color: rgba(255, 255, 255, 0.3)">{address}</div>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<button class="flags" style="background-color: rgba(21, 161, 222, 0.9)"
+						on:click={() => handleDisconnect()}>Disconnect</button>
+				</div>
 			{:else if !paramWallet}
 			<div class="daily-trade-menu" style="width: 100%; grid-template-columns: 1fr;">
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -538,10 +546,15 @@
 				</button>
 			</div>
 			{/if}
+			<h2>Search Wallet </h2>
+			<input class="input-wallet" 
+				style="margin-bottom: 0px; background-image: url('https://cdn-icons-png.flaticon.com/512/149/149852.png'" 
+				placeholder="Search Wallet.." 
+				on:keydown={(key) => handleSearchKeyPressed(key)}
+				bind:value={addressToSearch}>
 		</div>
 	</header>
 	<br>
-	
 	<CardList>
 		{#if isLoading}
 			Loading..
@@ -576,7 +589,10 @@
   <a href="#top">Back to Top</a>
 </div>
 
+<!-- <input class="input-wallet" style={"width: 10%; position: fixed; bottom: 1em; right: 9em; padding: 10px 20px 12px 40px; margin-bottom: 0; background-image: url('https://cdn-icons-png.flaticon.com/512/149/149852.png'"} placeholder="Search Wallet.." bind:value={addressToSearch}> -->
+
 <style>
+
   .back-to-top a {
     color: inherit;
     text-decoration: none;
@@ -586,5 +602,4 @@
 	margin: auto;
 	max-width: max-content;
   }
-
 </style>
