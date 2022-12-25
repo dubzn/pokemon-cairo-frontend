@@ -15,7 +15,7 @@
 	import { Account, Contract, ec, number, uint256, defaultProvider } from "starknet";
 	import { connect, disconnect } from "get-starknet"
 	
-	const POKEMON_CONTRACT_ADDRESS = "0x052ac3fb8c9cee6f2b36b786627f1ab5f2b6db0945f6c6d7d8d79d9400ebae91"
+	const POKEMON_CONTRACT_ADDRESS = "0x03a1db2968737c3b2797accd5f3d6c9daf15c563e4a8de0ad061e88a42043739"
 	const ipfs_url = "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8"
     const CARDS_DECK = 69;
 	const DAILY_MINT_STATUS_KEY = "daily_mint_status"
@@ -312,9 +312,6 @@
 		nextMintDay.setUTCMinutes(0);
 		nextMintDay.setUTCSeconds(0);
 		nextDayMintCountDown = (nextMintDay.valueOf() / 1000) - (Date.now().valueOf() / 1000);
-		console.log((nextMintDay.valueOf() / 1000))
-		console.log((Date.now().valueOf() / 1000))
-		console.log(nextDayMintCountDown * 1000)
 		timer.start(nextDayMintCountDown * 1000)
 		isLoadingBlockTime = false;
 	}
@@ -329,9 +326,10 @@
 		} 
 	}
 
-	// console.log(stringToFeltArray("ipfs://Qme8n4HBTyt8rvLr6bX5XiT6vCLsNkVNK8NjAw66esYQQ5/")) // metadata
-	// console.log(stringToFeltArray("ipfs://QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/")) // cartas
-
+	// console.log(stringToFeltArray("ipfs://Qme8n4HBTyt8rvLr6bX5XiT6vCLsNkVNK8NjAw66esYQQ5/")) // contract metadata
+	// console.log(stringToFeltArray("ipfs://QmemtWG3sHr5aFPGxsPCaxdv9qotWYChf17PLiepAvfMwy/")) // metadata cartas
+	// console.log(stringToFeltArray("ipfs://QmaBVymFCD7EX9HYZPfgQCsvbmDeuGfEajsGd7a8mz4ofi/")) // last contract cartas
+	
 	onMount(() => {
 		const $headings = document.querySelectorAll("h1,h2,h3");
 		const $anchor = [...$headings].filter((el) => {
@@ -576,7 +574,6 @@
 							quantity={card.quantity}
 							rarity="Common"
 						/>
-						
 					{/if}
 				{/if}
 			{/each}
