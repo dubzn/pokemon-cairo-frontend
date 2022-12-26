@@ -200,6 +200,8 @@
 		isConnected=false
 		mintedCards = []
 		mintedTodayCards = []
+		localStorage.removeItem(DAILY_MINT_STATUS_KEY)
+		localStorage.removeItem(DAILY_SEND_CARD_STATUS_KEY)
 	}
 
 	const updateDailyMintTransactionStatus = async () => {
