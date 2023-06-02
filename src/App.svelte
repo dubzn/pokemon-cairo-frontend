@@ -11,12 +11,14 @@
 	import pokemon from "./contract/data.json";
 	import { stringToFeltArray } from "./utils/utils.js";
 	import { timer, time } from "./utils/countdown.js";
+	import Modal from './utils/modal.svelte';
 
-	import { Account, Contract, ec, number, uint256, defaultProvider } from "starknet";
+	import { Provider, Account, Contract, ec, number, uint256, defaultProvider } from "starknet";
 	import { connect, disconnect } from "get-starknet"
 	
-	const POKEMON_CONTRACT_ADDRESS = "0x03a1db2968737c3b2797accd5f3d6c9daf15c563e4a8de0ad061e88a42043739"
-	const ipfs_url = "https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8"
+	const POKEMON_CONTRACT_ADDRESS = '0x03a1db2968737c3b2797accd5f3d6c9daf15c563e4a8de0ad061e88a42043739'
+	const ipfs_url = 'https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8'
+	const GOERLI_URL = 'https://alpha4.starknet.io'
     const CARDS_DECK = 69;
 	const DAILY_MINT_STATUS_KEY = "daily_mint_status"
 	const DAILY_SEND_CARD_STATUS_KEY = "daily_send_card_status"
@@ -39,6 +41,7 @@
 	let isLoadingMintedToday = true;
 	let isLoadingTradeData = true;
 	let isLoadingBlockTime = true;
+	let isGoerliAccount = true;
 
 	let addressToSendCard;
 	let addressToSearch;
@@ -65,9 +68,16 @@
 
 			if (wallet) {
 				await wallet.enable({ showModal: true });
-				isConnected = wallet.isConnected    
-				provider = wallet.account     
-				address = wallet.selectedAddress   
+				isConnected = wallet.isConnected
+				provider = wallet.account;
+				address = wallet.selectedAddress
+				
+
+				if (provider.provider.baseUrl != GOERLI_URL) {
+					isGoerliAccount = false
+					return;
+				}
+
 
 				if (paramWallet) {
 					if (paramWallet.toLowerCase().includes(address.substring(2).toLowerCase())) {
@@ -76,7 +86,7 @@
 						address = paramWallet
 					}
 				}
-				
+
 				pokemonContract = new Contract(contract.abi, POKEMON_CONTRACT_ADDRESS, provider);
 				walletModalVisible = false
 				var data = { provider, address, isConnected}
@@ -349,12 +359,30 @@
 </script>
 
 <main>
+	{#if !isGoerliAccount && isConnected}
+	<div class="blackout-background">
+	</div>
+	<div class="non-goerli-modal">
+		<center>
+			<h1>PokeCairo is only available on Starknet Goerli (Testnet)</h1> 
+			<p>Please switch to Testnet account and try again</p>
+			<img src="https://i.ibb.co/6RzGryG/image.pngruta_de_la_imagen.jpg" style="transform: rgba(21, 161, 222, 0.9)" alt="sad-gengar">
+			<br>
+			<div class="daily-trade-menu" style="width: 100%; grid-template-columns: 100%;">
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<button class="flags" style="background-color: rgba(21, 161, 222, 0.9)"
+					on:click={() => handleDisconnect()}>Disconnect Wallet</button>
+			</div>
+		</center>
+	</div>
+	{/if}
+
 	<header>
 		<div class="header-inside">
 			<h1 id="⚓-top">Cairo Pokemon Cards</h1> 
 			<section class="intro" id="⚓-intro">
 				<p>
-					This is a collection of <mark>NFTs</mark> (with no real value) based on the first pack of the original Pokemon sets (nerd stuff).
+					This is a collection of <mark>NFTs</mark> (with no real value) based on the first pack of the original Pokemon sets.
 					This is <mark>NOT</mark> intended for any kind of monetary benefit, it is simply for fun and to learn more about Blockchain/Starknet ecosystem.
 					I do <b>not</b> own the art found on the cards, all rights reserved to their creators.
 				</p>
@@ -368,12 +396,9 @@
 					In principle the base set contains 102 cards, but in this case we will remove the trainer and energy cards (a total of 69 cards remain). 
 				</p>
 
-				<p>
-					This frontend is an adaptation of <a href="https://twitter.com/simeydotme" style="color: rgb(66, 219, 240);" target="_blank" rel="noreferrer"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter</title><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/> </svg> @simeydotme</a> work.
-				</p>
 				<br/>
 				<p>
-					Backend in Cairo by <a href="https://twitter.com/dub_zn" style="color: rgb(66, 219, 240);" target="_blank" rel="noreferrer"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter</title><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/> </svg>@dub_zn</a>.
+					Created by <a href="https://twitter.com/dub_zn" style="color: rgb(66, 219, 240);" target="_blank" rel="noreferrer"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter</title><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/> </svg>@dub_zn</a>.
 				</p>
 				<br/>
 				<p>
