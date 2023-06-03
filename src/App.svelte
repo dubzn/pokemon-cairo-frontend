@@ -70,14 +70,13 @@
 				await wallet.enable({ showModal: true });
 				isConnected = wallet.isConnected
 				provider = wallet.account;
-				address = wallet.selectedAddress
-				
+				address = wallet.selectedAddress;
 
-				if (provider.provider.baseUrl != GOERLI_URL) {
-					isGoerliAccount = false
+				let wallet_base_url = getWalletBaseUrlFromProvider(provider);
+				if (wallet_base_url != GOERLI_URL && wallet_base_url != "") {
+					isGoerliAccount = false;
 					return;
 				}
-
 
 				if (paramWallet) {
 					if (paramWallet.toLowerCase().includes(address.substring(2).toLowerCase())) {
@@ -336,6 +335,19 @@
 				window.location.replace(url + "?wallet=" + addressToSearch)
 			}
 		} 
+	}
+
+	const getWalletBaseUrlFromProvider = (provider) => {
+		let wallet_base_url = "";
+		if (provider.provider != undefined && provider.provider.baseUrl != undefined) {
+			wallet_base_url = provider.provider.baseUrl;
+		} else if (provider.baseUrl != undefined) {
+			wallet_base_url = provider.baseUrl;
+		} else {
+			console.log("Error while trying to obtain base url from provider: ", provider);
+		}
+
+		return wallet_base_url;
 	}
 
 	// console.log(stringToFeltArray("ipfs://Qme8n4HBTyt8rvLr6bX5XiT6vCLsNkVNK8NjAw66esYQQ5/")) // contract metadata
