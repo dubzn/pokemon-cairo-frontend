@@ -21,7 +21,7 @@ export default defineConfig(({mode}) => {
   return {
     optimizeDeps: { // 👈 optimizedeps
       esbuildOptions: {
-        target: "esnext", 
+        target: 'es2020', 
         // Node.js global to browser globalThis
         define: {
           global: 'globalThis'
@@ -31,6 +31,9 @@ export default defineConfig(({mode}) => {
         },
       }
     }, 
+    build: {
+      target: 'es2020'
+    },
     plugins: [svelte(), htmlPlugin()],
     server: {
       watch: {
