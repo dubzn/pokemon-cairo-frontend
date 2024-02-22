@@ -13,12 +13,12 @@
 	import { timer, time } from "./utils/countdown.js";
 	import Modal from './utils/modal.svelte';
 
-	import { Provider, Account, Contract, ec, number, uint256, defaultProvider } from "starknet";
+	import { Account, Contract, ec, uint256, cairo, RpcProvider } from "starknet";
 	import { connect, disconnect } from "get-starknet"
+  import KeyPair from "elliptic/lib/elliptic/ec/key";
 	
 	const POKEMON_CONTRACT_ADDRESS = '0x03a1db2968737c3b2797accd5f3d6c9daf15c563e4a8de0ad061e88a42043739'
-	const ipfs_url = 'https://ipfs.io/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8'
-	const GOERLI_URL = 'https://alpha4.starknet.io'
+	const ipfs_url = 'https://moccasin-precise-sailfish-233.mypinata.cloud/ipfs/QmcPpMHw41aeiw3zGL2FrVCbXKBgfGZcmtb2BoZzSdcqF8/'
     const CARDS_DECK = 69;
 	const DAILY_MINT_STATUS_KEY = "daily_mint_status"
 	const DAILY_SEND_CARD_STATUS_KEY = "daily_send_card_status"
@@ -28,8 +28,9 @@
 	const OWNED_CARDS = "ownedCards"
 	const DAILY_TRADE = "dailyTrade"
 	
-	let provider;
+	let account; 
 	let address;
+	let provider;
 	let isConnected = false;
 	let walletModalVisible;
 	let pokemonContract;
@@ -64,16 +65,17 @@
 	const connectWallet = async() => {   
 		try{
 			walletModalVisible = true
-			const wallet = await connect({modalOptions: {theme: "dark"}});
+			const wallet = await connect({ modalTheme: "system" });
 
 			if (wallet) {
-				await wallet.enable({ showModal: true });
+				await wallet.enable();
+				account = wallet.account;
 				isConnected = wallet.isConnected
-				provider = wallet.account;
 				address = wallet.selectedAddress;
-
-				let wallet_base_url = getWalletBaseUrlFromProvider(provider);
-				if (wallet_base_url != GOERLI_URL && wallet_base_url != "") {
+				
+				let wallet_base_url = getWalletBaseUrlFromProvider(account);
+				provider = new RpcProvider({ nodeUrl: wallet_base_url });
+				if ((wallet.chainId && wallet.chainId != "SN_GOERLI") || account.provider.chainId != "0x534e5f474f45524c49") {
 					isGoerliAccount = false;
 					return;
 				}
@@ -85,16 +87,14 @@
 						address = paramWallet
 					}
 				}
-
 				pokemonContract = new Contract(contract.abi, POKEMON_CONTRACT_ADDRESS, provider);
 				walletModalVisible = false
 				var data = { provider, address, isConnected}
-				
 				return data
 			}
 		}   catch(error){     
 			walletModalVisible = false
-			console.log(error.message)
+			console.error(error.message)
 		}
 	}
 
@@ -105,7 +105,8 @@
 				return;
 			}
 			pokemonContract = new Contract(contract.abi, POKEMON_CONTRACT_ADDRESS, provider);
-			let sendCardResponse = await pokemonContract.send_card(addressToSendCard, uint256.bnToUint256(number.toBN(cardSelectedToSend, 16)))
+			pokemonContract.connect(account);
+			let sendCardResponse = await pokemonContract.send_card(addressToSendCard, uint256.bnToUint256(cardSelectedToSend))
 			
 			if (sendCardResponse.transaction_hash != "0x0") {
 				localStorage.setItem(DAILY_SEND_CARD_STATUS_KEY, JSON.stringify({status: "RECEIVED", txHash: sendCardResponse.transaction_hash}))
@@ -119,7 +120,7 @@
 			refresh([OWNED_CARDS, DAILY_TRADE])
 
 		} catch (error) {
-			console.log("Error while trying to send card: ", error)
+			console.error("Error while trying to send card: ", error)
 		}
 	}
 
@@ -130,18 +131,18 @@
 
 			pokemonContract = new Contract(contract.abi, POKEMON_CONTRACT_ADDRESS, provider);
 			let dailyTradeResponse = await pokemonContract.get_user_daily_trade(address)
-
-			trade.dailySend = Math.floor((parseInt(dailyTradeResponse) / 10))
-			trade.dailyReceive = (parseInt(dailyTradeResponse) % 10)
+			trade.dailySend = Math.floor((parseInt(dailyTradeResponse.daily_trade) / 10))
+			trade.dailyReceive = (parseInt(dailyTradeResponse.daily_trade) % 10)
 			return trade
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 		}
 	}
 
 	const mintDailyCards = async() => {
 		try {
 			pokemonContract = new Contract(contract.abi, POKEMON_CONTRACT_ADDRESS, provider);
+			pokemonContract.connect(account);
 			let dailyMintCardsResponse = await pokemonContract.mint_daily_cards()
 			
 			if (dailyMintCardsResponse.transaction_hash != "0x0") {
@@ -156,7 +157,7 @@
 			refresh([OWNED_CARDS, DAILY_MINT])
 					
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 		}
 	}
 
@@ -165,7 +166,7 @@
 		const accounts = Array(CARDS_DECK).fill(address.toString())
 		var ids = []
 		for (var i = 1; i <= CARDS_DECK; i++) {
-			ids.push(uint256.bnToUint256(number.toBN(i, 16)));
+			ids.push(cairo.uint256(i));
 		}
 
 		var cards = []
@@ -174,7 +175,7 @@
 		
 		for (var i = 0; i < CARDS_DECK; i++) {
 			var id = i;
-			var quantity = number.toBN(balanceResponse.balances[i].low, 16) ? number.toBN(balanceResponse.balances[i].low, 16).toString() : "0";
+			var quantity = balanceResponse.balances[i].low ?  balanceResponse.balances[i].low.toString() : "0";
 			if (parseInt(quantity) > 0) {
 				cards.push({id, quantity})
 			}	
@@ -185,27 +186,25 @@
 	const getCardsMintedToday = async () => {
 		isLoadingMintedToday = true
 		let cardsMinted = await pokemonContract.get_user_claimed_pack(address)
-		let cards = []
-
-		let cardsInString = cardsMinted.toString()
-
-		if (cardsInString.length == 1) {
-			return cards;
-		}
+		let cardsInString = cardsMinted.claimed.toString()
+		
+		if (cardsMinted.claimed == 0) {
+			return [];
+		} 
 
 		if (cardsInString.length % 2 != 0) {
 			cardsInString = "0" + cardsInString;
 		}
 
+		let cards = []
 		for (var i = cardsInString.length - 1; i >= 0; i-=2) {
-			cards.push(parseInt(cardsInString[i-1] + cardsInString[i]))
+			cards.push(parseInt(cardsInString[i - 1] + cardsInString[i]))
 		}
-
 		return cards;
 	};
 
 	const handleDisconnect = async () =>{
-		disconnect( {clearLastWallet: true, clearDefaultWallet: true} );
+		disconnect({ clearLastWallet: true });
 		isConnected=false
 		mintedCards = []
 		mintedTodayCards = []
@@ -218,7 +217,7 @@
 		if (dailyMintTxStored != undefined) {
 			let data = JSON.parse(localStorage.getItem(DAILY_MINT_STATUS_KEY))
 
-			let txStatus = await defaultProvider.getTransactionReceipt(data.txHash)
+			let txStatus = await provider.getTransactionReceipt(data.txHash)
 			localStorage.setItem(DAILY_MINT_STATUS_KEY, JSON.stringify({status: txStatus.status, txHash: txStatus.transaction_hash}))
 			dailyMintTxStatus.status = txStatus.status
 			dailyMintTxStatus.txHash = txStatus.transaction_hash
@@ -248,7 +247,7 @@
 		if (dailySendCardTxStored != undefined) {
 			let data = JSON.parse(localStorage.getItem(DAILY_SEND_CARD_STATUS_KEY))
 			
-			let txStatus = await defaultProvider.getTransactionReceipt(data.txHash)
+			let txStatus = await provider.getTransactionReceipt(data.txHash)
 			localStorage.setItem(DAILY_SEND_CARD_STATUS_KEY, JSON.stringify({status: txStatus.status, txHash: txStatus.transaction_hash}))
 			dailySendCardTxStatus.status = txStatus.status
 			dailySendCardTxStatus.txHash = txStatus.transaction_hash
@@ -277,14 +276,16 @@
 		if (params.includes(DAILY_MINT)) {
 			isLoadingMintedToday = true;
 			calculateNextDayMint()
+
 			getCardsMintedToday().then((mintedToday) => { 
+				console.log("MINTED TODAY: ", mintedToday)
 				mintedTodayCards = mintedToday; 
 				isLoadingMintedToday = false; });
 		} 
 		if (params.includes(DAILY_TRADE)) {
 			isLoadingTradeData = true;
 			getDailyTradeData().then((trade)  => { userTradeData = trade; isLoadingTradeData = false; });
-		}
+		}	
 		if (params.includes(OWNED_CARDS)) {
 			isLoading = true;
 			getCards().then((cards) => { mintedCards = cards; isLoading = false; });	
@@ -293,22 +294,22 @@
 
 	const init = async () => {
 		connectWallet().then(data => {
-		provider = data.provider
-		address = data.address
-		isConnected = data.isConnected
+			provider = data.provider
+			address = data.address
+			isConnected = data.isConnected
 
-		updateDailyMintTransactionStatus()
-		updateDailyTradeTransactionStatus()
+			updateDailyMintTransactionStatus()
+			updateDailyTradeTransactionStatus()
 
-		if (isConnected) {
-			const account = new Account(
-				provider,
-				address,
-				ec.getKeyPair("")
-			);	
-			pokemonContract.connect(account);
-			refresh([DAILY_MINT, DAILY_TRADE, OWNED_CARDS])
-		}
+			if (isConnected) {
+				const account = new Account(
+					provider,
+					address,
+					""
+				);	
+				pokemonContract.connect(account);
+				refresh([DAILY_MINT, DAILY_TRADE, OWNED_CARDS])
+			}
 		})
 	}
 
@@ -317,7 +318,7 @@
 	const calculateNextDayMint = async () => {
 		isLoadingBlockTime = true;
 		let blockTime = await pokemonContract.blockTimestamp();
-		let nextMintDay = new Date((blockTime) * 1000);
+		let nextMintDay = new Date(cairo.uint256(blockTime.timestamp).low * 1000);
 		nextMintDay.setDate(nextMintDay.getDate() + 1)
 		nextMintDay.setUTCHours(0);
 		nextMintDay.setUTCMinutes(0);
@@ -339,14 +340,13 @@
 
 	const getWalletBaseUrlFromProvider = (provider) => {
 		let wallet_base_url = "";
-		if (provider.provider != undefined && provider.provider.baseUrl != undefined) {
-			wallet_base_url = provider.provider.baseUrl;
-		} else if (provider.baseUrl != undefined) {
-			wallet_base_url = provider.baseUrl;
+		if (provider.provider != undefined && provider.provider.nodeUrl != undefined) {
+			wallet_base_url = provider.provider.nodeUrl;
+		} else if (provider.nodeUrl != undefined) {
+			wallet_base_url = provider.nodeUrl;
 		} else {
-			console.log("Error while trying to obtain base url from provider: ", provider);
+			console.error("Error while trying to obtain base url from provider: ", provider);
 		}
-
 		return wallet_base_url;
 	}
 

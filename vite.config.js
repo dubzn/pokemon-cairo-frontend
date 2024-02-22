@@ -19,6 +19,18 @@ export default defineConfig(({mode}) => {
   };
 
   return {
+    optimizeDeps: { // 👈 optimizedeps
+      esbuildOptions: {
+        target: "esnext", 
+        // Node.js global to browser globalThis
+        define: {
+          global: 'globalThis'
+        },
+        supported: { 
+          bigint: true 
+        },
+      }
+    }, 
     plugins: [svelte(), htmlPlugin()],
     server: {
       watch: {
